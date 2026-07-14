@@ -1,0 +1,10 @@
+{% load static product_extras %}
+{% product_image_info product as img %}
+{% if img.is_placeholder %}
+  <div class="product__img-placeholder" aria-label="{{ product.title }}">{{ product_placeholder_label }}</div>
+{% else %}
+  <img class="product-image-trigger" src="{{ img.src }}" alt="{{ product.title }}"
+       data-lightbox-src="{{ img.lightbox_src }}" data-lightbox-alt="{{ product.title }}"
+       loading="lazy" decoding="async"
+       onerror="this.onerror=null;this.src='{% static 'img/placeholder.png' %}';this.removeAttribute('data-lightbox-src');this.classList.remove('product-image-trigger');">
+{% endif %}

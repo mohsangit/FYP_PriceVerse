@@ -1,0 +1,96 @@
+{% load static %}
+<section class="section section--alt" id="reviews">
+  <div class="container">
+    <div class="section__pill" data-reveal>Testimonials</div>
+    <h2 class="section__title" data-reveal>Loved by <span class="grad2">Smart Shoppers</span></h2>
+    <p class="section__sub" data-reveal>Real feedback from people who save money with PriceVerse price tracking and AI insights.</p>
+
+    {% if reviews %}
+    <div class="reviews-grid">
+      {% for review in reviews %}
+      <article class="review-card" data-reveal>
+        <div class="review-card__stars" aria-label="{{ review.rating }} out of 5 stars">
+          {% for on in review.star_states %}
+          <svg class="review-card__star{% if on %} review-card__star--on{% endif %}" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.8 6.1 20.8l1.2-6.6L2.5 9l6.6-.9L12 2z" fill="currentColor"/>
+          </svg>
+          {% endfor %}
+        </div>
+
+        <p class="review-card__body">“{{ review.body }}”</p>
+
+        {% if review.highlight_value %}
+        <span class="review-card__metric">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 8h6v6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {% if review.highlight_label %}{{ review.highlight_label }}: {% endif %}{{ review.highlight_value }}
+        </span>
+        {% endif %}
+
+        <div class="review-card__author">
+          <div class="review-avatar">{{ review.initials }}</div>
+          <div>
+            <div class="review-card__name">{{ review.author_name }}</div>
+            {% if review.author_role %}<div class="review-card__role">{{ review.author_role }}</div>{% endif %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <div class="rating-strip" data-reveal>
+      <div class="rating-strip__item">
+        <div class="rating-strip__num grad2">{{ reviews_avg }}/5</div>
+        <div class="rating-strip__label">Average Rating</div>
+      </div>
+      <div class="rating-strip__item">
+        <div class="rating-strip__num">{{ reviews_count }}</div>
+        <div class="rating-strip__label">Reviews</div>
+      </div>
+      <div class="rating-strip__item">
+        <div class="rating-strip__num">{{ site_stats.product_count }}</div>
+        <div class="rating-strip__label">Products Tracked</div>
+      </div>
+      <div class="rating-strip__item">
+        <div class="rating-strip__num">{{ site_stats.store_count }}</div>
+        <div class="rating-strip__label">Stores</div>
+      </div>
+    </div>
+    {% else %}
+    <p class="muted center">No reviews yet — be the first to share your experience!</p>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+    <form class="review-form" method="post" action="{% url 'core:add_review' %}" data-reveal>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}#reviews">
+      <h3 style="margin:0 0 14px;">Share your experience</h3>
+      <div class="review-form__row" style="align-items:flex-end;">
+        <div>
+          <label class="field-label">Your role (optional)</label>
+          <input class="field-input" type="text" name="author_role" maxlength="80" placeholder="e.g. Smart Shopper, Student">
+        </div>
+        <div style="flex:0 0 auto; min-width:auto;">
+          <label class="field-label">Rating</label>
+          <div class="rating-input">
+            <input type="radio" id="rv5" name="rating" value="5" checked><label for="rv5" title="5 stars">★</label>
+            <input type="radio" id="rv4" name="rating" value="4"><label for="rv4" title="4 stars">★</label>
+            <input type="radio" id="rv3" name="rating" value="3"><label for="rv3" title="3 stars">★</label>
+            <input type="radio" id="rv2" name="rating" value="2"><label for="rv2" title="2 stars">★</label>
+            <input type="radio" id="rv1" name="rating" value="1"><label for="rv1" title="1 star">★</label>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <label class="field-label">Your review</label>
+        <textarea class="field-textarea" name="body" maxlength="1000" required placeholder="Tell us how PriceVerse helped you find the best price..."></textarea>
+      </div>
+      <button class="btn btn--primary" type="submit" style="margin-top:16px;">Submit Review</button>
+    </form>
+    {% else %}
+    <div class="review-prompt" data-reveal>
+      <p class="muted" style="margin:0 0 14px;">Want to share your experience with PriceVerse?</p>
+      <a class="btn btn--primary" href="{% url 'accounts:login' %}?next={{ request.path }}%23reviews">Log in to leave a review</a>
+    </div>
+    {% endif %}
+  </div>
+</section>

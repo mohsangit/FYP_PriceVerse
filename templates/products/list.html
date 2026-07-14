@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% load static product_extras %}
+
+{% block title %}Products | PriceVerse{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+  <div class="container">
+
+    <h2 class="section__title">All Products</h2>
+
+    <p class="section__sub">
+      {{ paginator.count }} product{{ paginator.count|pluralize }}
+      {% if active_source %}from <strong>{{ active_source.name }}</strong>{% else %}from the database{% endif %}
+      {% if paginator.num_pages > 1 %}&mdash; page {{ page_obj.number }} of {{ paginator.num_pages }}{% endif %}
+    </p>
+
+    <div class="products-toolbar">
+      <form class="search search--inline products-toolbar__search" method="get" action="{% url 'products:list' %}">
+        {% if source %}
+          <input type="hidden" name="source" value="{{ source }}" />
+        {% endif %}
+        <div class="search__icon">🔎</div>
+        <input class="search__input" name="q" value="{{ q }}" placeholder="Search products..." />
+        <button class="btn btn--primary search__btn" type="submit">Search →</button>
+      </form>
+
+      {% include "partials/source_filters.html" %}
+    </div>
+
+    <div class="grid grid--3">
+
+      {% for card in product_cards %}
+
+        {% with p=card.product %}
+
+        <div class="product{% if card.best_listing and card.best_listing.is_on_sale and card.best_listing.old_price %} product--sale{% endif %}" data-reveal>
+
+          {% include "partials/favorite_button.html" with product=p %}
+
+          {% include "partials/product_card_badge.html" with product=p listing=card.best_listing %}
+
+          <a class="product__img" href="{% url 'products:detail' slug=p.slug %}">
+
+            {% include "partials/product_image.html" with product=p %}
+
+          </a>
+
+          <div class="product__meta">
+
+            <a class="product__name" href="{% url 'products:detail' slug=p.slug %}">{{ p.title }}</a>
+
+            {% if p.brand %}<div class="product__brand">{{ p.brand }}</div>{% endif %}
+
+            {% include "partials/sale_price.html" with listing=card.best_listing %}
+
+            <div class="product__small">{{ p.trend_text }} • {{ p.trend_days }}d</div>
+
+            <div class="product__actions">
+
+              {% include "partials/notify_button.html" with product=p %}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {% endwith %}
+
+      {% empty %}
+
+        <p class="muted products-toolbar__empty">
+          No products found
+          {% if q %} for "{{ q }}"{% endif %}
+          {% if active_source %} on {{ active_source.name }}{% endif %}.
+        </p>
+
+      {% endfor %}
+
+    </div>
+
+    {% if paginator.num_pages > 1 %}
+
+    <nav class="pagination" aria-label="Product pages">
+
+      {% if page_obj.has_previous %}
+
+        <a
+          class="btn btn--soft pagination__btn"
+          href="?{% product_list_query q=q source=source page=page_obj.previous_page_number %}"
+        >Previous</a>
+
+      {% else %}
+
+        <button class="btn btn--soft pagination__btn" type="button" disabled aria-disabled="true">Previous</button>
+
+      {% endif %}
+
+      <span class="pagination__info">
+        Page <strong>{{ page_obj.number }}</strong> of <strong>{{ paginator.num_pages }}</strong>
+      </span>
+
+      {% if page_obj.has_next %}
+
+        <a
+          class="btn btn--soft pagination__btn"
+          href="?{% product_list_query q=q source=source page=page_obj.next_page_number %}"
+        >Next</a>
+
+      {% else %}
+
+        <button class="btn btn--soft pagination__btn" type="button" disabled aria-disabled="true">Next</button>
+
+      {% endif %}
+
+    </nav>
+
+    {% endif %}
+
+  </div>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/product-filters.js' %}"></script>
+{% endblock %}

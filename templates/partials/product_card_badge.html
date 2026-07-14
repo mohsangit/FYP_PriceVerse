@@ -1,0 +1,5 @@
+{% if listing and listing.is_on_sale and listing.discount_pct and listing.old_price %}
+  <div class="product__badge product__badge--sale">{{ listing.discount_pct }}% OFF</div>
+{% else %}
+  <div class="product__badge">{{ product.insight_tag }}</div>
+{% endif %}

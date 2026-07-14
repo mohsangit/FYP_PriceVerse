@@ -1,0 +1,15 @@
+Hi {{ user.username }},
+
+Great news! {{ product.title }} is now available at a better price.
+
+{% if discount_pct %}
+Updated deal: Rs {{ info.best_price }} ({{ discount_pct }}% off)
+{% else %}
+Updated price: Rs {{ info.best_price }}
+{% endif %}
+
+The {{ product.title }} is now available at its best price. Check it out now!
+
+View on PriceVerse: {{ product_url }}
+
+— PriceVerse

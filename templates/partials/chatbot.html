@@ -1,0 +1,58 @@
+{% load static %}
+
+<div class="pv-chatbot" id="pvChatbot">
+  <button class="pv-chatbot__bubble" id="pvChatbotBubble" aria-label="Open chatbot">
+    <span class="pv-chatbot__dot"></span>
+    <svg class="pv-chatbot__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true">
+      <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8A2.5 2.5 0 0 1 17.5 16H9l-4 3.5V16H6.5A2.5 2.5 0 0 1 4 13.5v-8z" fill="currentColor"/>
+      <circle cx="9" cy="9.5" r="1.1" fill="#3b5cff"/>
+      <circle cx="12" cy="9.5" r="1.1" fill="#3b5cff"/>
+      <circle cx="15" cy="9.5" r="1.1" fill="#3b5cff"/>
+    </svg>
+  </button>
+
+  <div class="pv-chatbot__panel" id="pvChatbotPanel" aria-hidden="true">
+    <div class="pv-chatbot__header">
+      <div class="pv-chatbot__title">
+        <div class="pv-chatbot__avatar">PV</div>
+        <div>
+          <div class="pv-chatbot__name">Phone Assistant</div>
+          <div class="pv-chatbot__sub">Online • Llama • WhatMobile</div>
+        </div>
+      </div>
+      <button class="pv-chatbot__close" id="pvChatbotClose" aria-label="Close chatbot">✕</button>
+    </div>
+
+    <div class="pv-chatbot__messages" id="pvChatbotMessages">
+      <div class="pv-chatbot__welcome">
+        <div class="pv-chatbot__welcome-icon">PV</div>
+        <h4>Welcome to PriceVerse</h4>
+        <p>Ask me about mobile phone prices, specifications, comparisons, reviews, and recommendations.</p>
+        <div class="pv-chatbot__feats">
+          <span class="pv-chatbot__feat">Prices</span>
+          <span class="pv-chatbot__feat">Specs</span>
+          <span class="pv-chatbot__feat">Comparisons</span>
+          <span class="pv-chatbot__feat">Reviews</span>
+        </div>
+      </div>
+    </div>
+
+    <form class="pv-chatbot__input" id="pvChatbotForm">
+      {% csrf_token %}
+      <input type="text" id="pvChatbotText" placeholder="Ask about any phone..." autocomplete="off" />
+      <button type="submit" class="pv-chatbot__send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3 10l12 2-12 2 .4 6.4z" fill="currentColor"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  window.PV_CHAT_URL = "{% url 'core:chat_api' %}";
+  window.PV_CHAT_STREAM_URL = "{% url 'core:chat_stream_api' %}";
+  window.PV_CHAT_STREAM = true;
+  window.PV_CHAT_TIMEOUT_MS = 180000;
+</script>
+<script src="{% static 'js/chatbot.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/chatbot.css' %}">

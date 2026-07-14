@@ -1,0 +1,11 @@
+{% load humanize %}
+{% if listing %}
+  <div class="sale-price{% if listing.is_on_sale and listing.old_price %} sale-price--on-sale{% endif %}">
+    {% if listing.is_on_sale and listing.old_price %}
+      <span class="sale-price__old">Rs. {{ listing.old_price|intcomma }}</span>
+    {% endif %}
+    <span class="sale-price__current">Rs. {{ listing.current_price|intcomma }}</span>
+  </div>
+{% else %}
+  <div class="sale-price"><span class="sale-price__current">Rs. ---</span></div>
+{% endif %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Favorites | PriceVerse{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h2 class="section__title">My Favorites</h2>
+    <p class="section__sub">Products you've saved for later.</p>
+
+    {% if product_cards %}
+      <div class="grid grid--3">
+        {% for card in product_cards %}
+          {% with p=card.product %}
+          <div class="product{% if card.best_listing and card.best_listing.is_on_sale and card.best_listing.old_price %} product--sale{% endif %}" data-reveal>
+            {% include "partials/favorite_button.html" with product=p %}
+            {% include "partials/product_card_badge.html" with product=p listing=card.best_listing %}
+            <a class="product__img" href="{% url 'products:detail' slug=p.slug %}">
+              {% include "partials/product_image.html" with product=p %}
+            </a>
+            <div class="product__meta">
+              <a class="product__name" href="{% url 'products:detail' slug=p.slug %}">{{ p.title }}</a>
+              {% if p.brand %}<div class="product__brand">{{ p.brand }}</div>{% endif %}
+              {% include "partials/sale_price.html" with listing=card.best_listing %}
+              <div class="product__small">{{ p.trend_text }} • {{ p.trend_days }}d</div>
+              <div class="product__actions">
+                {% include "partials/notify_button.html" with product=p %}
+              </div>
+            </div>
+          </div>
+          {% endwith %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="favorites-empty">
+        <p class="muted center">You haven't added any favorites yet.</p>
+        <div style="text-align:center; margin-top:14px;">
+          <a class="btn btn--soft" href="{% url 'products:list' %}">Browse Products</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

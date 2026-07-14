@@ -1,0 +1,117 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login | PriceVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% include "partials/theme_init.html" %}
+</head>
+<body class="authbody">
+  <button class="theme-toggle theme-toggle--floating" data-theme-toggle type="button" aria-label="Toggle theme">
+    <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+  </button>
+  <div class="auth">
+    <div class="auth__left">
+      <div class="auth__art">
+        <div class="orb"></div>
+        <div class="gridglow"></div>
+      </div>
+
+      <div class="auth__copy">
+        <h2>Smart Price Intelligence</h2>
+        <p>Powered by AI to find you the best deals across thousands of retailers in seconds.</p>
+
+        <div class="mini">
+          <div class="mini__card">
+            <div class="mini__num">{{ site_stats.product_count }}</div>
+            <div class="mini__lbl">Products</div>
+          </div>
+          <div class="mini__card">
+            <div class="mini__num">{{ site_stats.store_count }}</div>
+            <div class="mini__lbl">Stores</div>
+          </div>
+          <div class="mini__card">
+            <div class="mini__num">{{ site_stats.listing_count }}</div>
+            <div class="mini__lbl">Listings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth__right">
+      <div class="auth__brand">
+        <span class="brand__logo">↗</span>
+        <span class="brand__text">Price<span>Verse</span></span>
+      </div>
+
+      <div class="authcard">
+        <h1>Welcome Back</h1>
+        <p class="muted">Log in to access smart price insights</p>
+
+        {% if messages %}
+          <div class="msgwrap">
+            {% for message in messages %}
+              <div class="msg msg--{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+          <label class="lab">Email address</label>
+          <div class="in">
+            <span class="in__ic">✉</span>
+            {{ form.email }}
+          </div>
+          {% for err in form.email.errors %}<div class="err">{{ err }}</div>{% endfor %}
+
+          <label class="lab">Password</label>
+          <div class="in">
+            <span class="in__ic">🔒</span>
+            {{ form.password }}
+            <button type="button" class="eye" data-eye="1">👁</button>
+          </div>
+          {% for err in form.password.errors %}<div class="err">{{ err }}</div>{% endfor %}
+
+          <div class="row">
+            <label class="chk">
+              {{ form.remember }} <span>Remember me</span>
+            </label>
+            <a class="link" href="{% url 'accounts:password_reset' %}">Forgot password?</a>
+          </div>
+
+          <button class="btn btn--primary w100" type="submit">Sign In</button>
+
+          <p class="small muted center" style="margin-top:14px;">
+            Don't have an account?
+            <a class="link" href="{% url 'accounts:signup' %}">Sign up for free</a>
+          </p>
+        </form>
+      </div>
+
+      <p class="tiny muted center">
+        By signing in, you agree to our <a class="link" href="#">Terms</a> and <a class="link" href="#">Privacy</a>.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const eye = document.querySelector("[data-eye='1']");
+      const pwd = document.querySelector("input[name='password']");
+      if(!eye || !pwd) return;
+      eye.addEventListener("click", () => {
+        pwd.type = pwd.type === "password" ? "text" : "password";
+      });
+    })();
+  </script>
+</body>
+</html>

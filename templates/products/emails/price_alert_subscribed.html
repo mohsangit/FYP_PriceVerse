@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Price alert confirmed</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #0b1324; line-height: 1.6; max-width: 560px; margin: 0 auto; padding: 24px;">
+  <p>Hi {{ user.username }},</p>
+
+  <p>You subscribed to price alerts for <strong>{{ product.title }}</strong> on PriceVerse.</p>
+
+  <div style="background: #eef3ff; border: 1px solid #dbe6ff; border-radius: 12px; padding: 16px 18px; margin: 18px 0;">
+    <p style="margin: 0 0 6px;"><strong>You're all set!</strong></p>
+    <p style="margin: 0;">We will email <strong>{{ user.email }}</strong> when the price drops or a better discount appears.</p>
+    {% if current_price %}
+      <p style="margin: 12px 0 0;"><strong>Current best price:</strong> Rs {{ current_price }}{% if discount_pct %} ({{ discount_pct }}% off){% endif %}</p>
+    {% endif %}
+  </div>
+
+  <p>
+    <a href="{{ product_url }}" style="display: inline-block; background: #3b5cff; color: #fff; text-decoration: none; padding: 12px 18px; border-radius: 10px; font-weight: bold;">
+      View on PriceVerse
+    </a>
+  </p>
+
+  <p style="color: #6a7a99; font-size: 13px;">You received this email because you clicked Notify Me on PriceVerse.</p>
+</body>
+</html>

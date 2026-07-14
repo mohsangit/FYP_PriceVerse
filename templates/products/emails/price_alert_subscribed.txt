@@ -1,0 +1,14 @@
+Hi {{ user.username }},
+
+You subscribed to price alerts for {{ product.title }} on PriceVerse.
+
+{% if current_price %}
+We will email you at {{ user.email }} when the price drops or a better discount appears.
+Current best price: Rs {{ current_price }}{% if discount_pct %} ({{ discount_pct }}% off){% endif %}
+{% else %}
+We will email you at {{ user.email }} when the price drops or a better discount appears.
+{% endif %}
+
+View product: {{ product_url }}
+
+— PriceVerse

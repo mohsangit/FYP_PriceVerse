@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PriceOye">
+  <defs>
+    <linearGradient id="po" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b5cff"/>
+      <stop offset="100%" stop-color="#2f49f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#po)"/>
+  <text x="32" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="#fff">P</text>
+  <circle cx="44" cy="20" r="6" fill="#36d1c4"/>
+</svg>

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+
+{% block title %}Compare Phones | PriceVerse{% endblock %}
+
+
+
+{% block extra_head %}
+
+  <link rel="stylesheet" href="{% static 'css/compare.css' %}">
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<section class="cmp cmp--select">
+
+  <div class="container">
+
+
+
+    <div class="cmp__head" data-reveal>
+
+      <span class="cmp__pill">Phone Comparison</span>
+
+      <h1 class="cmp__title">Compare Phones <span class="grad">Side by Side</span></h1>
+
+      <p class="cmp__sub">
+
+        Select any two Samsung or Apple models from the WhatMobile database for a full side-by-side specification comparison.
+
+        Discounted prices from Pakistani retailers are shown automatically when available.
+
+      </p>
+
+      {% if whatmobile_count %}
+
+        <p class="cmp__meta muted">{{ whatmobile_count }} model{{ whatmobile_count|pluralize }} loaded from the WhatMobile database.</p>
+
+      {% else %}
+
+        <p class="cmp__meta cmp__meta--warn">No WhatMobile phones loaded yet. An admin must run the WhatMobile scraper first.</p>
+
+      {% endif %}
+
+    </div>
+
+
+
+    <form class="cmp-pickers" method="get" action="{% url 'products:compare_results' %}" id="cmpForm" data-reveal>
+
+      <div class="cmp-picker">
+
+        <label class="cmp-picker__label" for="cmpA">Phone 1</label>
+
+        <select class="cmp-picker__select" name="a" id="cmpA" required>
+
+          <option value="" disabled {% if not selected_a %}selected{% endif %}>Select a phone…</option>
+
+          {% for opt in phone_options %}
+
+            <option value="{{ opt.id }}" {% if opt.id == selected_a %}selected{% endif %}>
+
+              {{ opt.label }}
+
+            </option>
+
+          {% endfor %}
+
+        </select>
+
+      </div>
+
+
+
+      <div class="cmp-vs">VS</div>
+
+
+
+      <div class="cmp-picker">
+
+        <label class="cmp-picker__label" for="cmpB">Phone 2</label>
+
+        <select class="cmp-picker__select" name="b" id="cmpB" required>
+
+          <option value="" disabled {% if not selected_b %}selected{% endif %}>Select a phone…</option>
+
+          {% for opt in phone_options %}
+
+            <option value="{{ opt.id }}" {% if opt.id == selected_b %}selected{% endif %}>
+
+              {{ opt.label }}
+
+            </option>
+
+          {% endfor %}
+
+        </select>
+
+      </div>
+
+
+
+      <div class="cmp-pickers__action">
+
+        <button type="submit" class="btn btn--primary" id="cmpStartBtn" {% if not phone_options %}disabled{% endif %}>Start Comparison →</button>
+
+      </div>
+
+    </form>
+
+
+
+    <div class="cmp-empty" data-reveal>
+
+      <div class="cmp-empty__icon">📱</div>
+
+      <h3>Choose two phones to begin</h3>
+
+      <p>Pick a phone in each dropdown, then click <strong>Start Comparison</strong> to open the full results page with WhatMobile specifications.</p>
+
+    </div>
+
+
+
+  </div>
+
+</section>
+
+
+
+<div class="cmp-loading" id="cmpPageLoading" hidden aria-hidden="true">
+
+  <div class="cmp-loading__card">
+
+    <span class="cmp-spinner cmp-spinner--lg"></span>
+
+    <p>Loading specifications from WhatMobile…</p>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+  <script src="{% static 'js/compare.js' %}"></script>
+
+{% endblock %}
+

@@ -1,0 +1,131 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="user-authenticated" content="{% if request.user.is_authenticated %}true{% else %}false{% endif %}">
+  <title>{% block title %}PriceVerse{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% include "partials/theme_init.html" %}
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%234f46e5'/><text x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='Arial, sans-serif'>P</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <header class="nav" id="siteNav">
+    <div class="nav__inner container">
+      <a class="brand" href="{% url 'core:home' %}">
+        <span class="brand__logo">↗</span>
+        <span class="brand__text">Price<span>Verse</span></span>
+      </a>
+
+      <nav class="nav__links" id="navLinks">
+        <a href="{% url 'core:home' %}" class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">Home</a>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'products:list' %}" class="{% if request.resolver_match.url_name == 'list' or request.resolver_match.url_name == 'detail' %}is-active{% endif %}">Products</a>
+        <a href="{% url 'products:compare' %}" class="{% if request.resolver_match.url_name == 'compare' or request.resolver_match.url_name == 'compare_results' %}is-active{% endif %}">Compare</a>
+        {% if is_site_admin %}
+        <a href="{% url 'products:scrape' %}" class="{% if request.resolver_match.url_name == 'scrape' %}is-active{% endif %}">Admin Dashboard</a>
+        <a href="/admin/" class="nav__admin-link">Admin Panel</a>
+        {% endif %}
+        <a href="{% url 'core:about' %}" class="{% if request.resolver_match.url_name == 'about' %}is-active{% endif %}">About</a>
+        {% endif %}
+      </nav>
+
+      <div class="nav__cta">
+        <button class="theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme">
+          <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+        </button>
+        {% if request.user.is_authenticated %}
+        <a class="nav__favorites" href="{% url 'products:favorites' %}" title="Favorites" aria-label="Favorites">
+          <svg class="nav__favorites-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+          <span class="nav__favorites-count{% if not favorites_count %} nav__favorites-count--hidden{% endif %}" data-favorites-count>{{ favorites_count }}</span>
+        </a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+          <span class="nav__user">Hi, {{ request.user.username }}</span>
+          <a class="btn btn--ghost" href="{% url 'accounts:logout' %}">Logout</a>
+        {% else %}
+          <a class="btn btn--ghost" href="{% url 'accounts:login' %}">Log in</a>
+          <a class="btn btn--primary" href="{% url 'accounts:signup' %}">Sign up</a>
+        {% endif %}
+        <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-enter">
+    <div class="container">
+      {% if messages %}
+        <div class="msgwrap">
+          {% for message in messages %}
+            <div class="msg msg--{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}
+    <footer class="footer" id="about">
+      <div class="container footer__inner">
+        <div data-reveal>
+          <div class="brand brand--footer">
+            <span class="brand__logo">↗</span>
+            <span class="brand__text">Price<span>Verse</span></span>
+          </div>
+          <p class="footer__txt">
+            Your smart companion for price tracking, predictions, and never overpaying again.
+          </p>
+        </div>
+
+        <div class="footer__col" data-reveal data-reveal-delay="1">
+          <h4>Quick Links</h4>
+          <a href="{% url 'core:home' %}">Home</a>
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'products:list' %}">Products</a>
+          {% if is_site_admin %}
+          <a href="{% url 'products:scrape' %}">Admin Dashboard</a>
+          <a href="/admin/">Admin Panel</a>
+          {% endif %}
+          <a href="{% url 'core:about' %}">How it works</a>
+          {% endif %}
+        </div>
+
+        <div class="footer__col" data-reveal data-reveal-delay="2">
+          <h4>Project Team</h4>
+          <p>MOHAMMAD MOHSAN</p>
+          <p>MUHAMMAD RAHIM</p>
+          <p>MOHSIN ALI</p>
+          <p>HAFIZ MUHAMMAD GHULAM GHOUS</p>
+        </div>
+      </div>
+
+      <div class="container footer__bottom">
+        <span>© 2026 PriceVerse — University Final Year Project</span>
+        <span class="footer__links">Privacy Policy · Terms of Service</span>
+      </div>
+    </footer>
+    {% endblock %}
+  </main>
+
+  <script src="{% static 'js/ui.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/lightbox.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+
+  {% if request.user.is_authenticated %}
+  {% include "partials/chatbot.html" %}
+  {% endif %}
+
+</body>
+</html>

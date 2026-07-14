@@ -1,0 +1,17 @@
+<button
+  type="button"
+  class="notify-btn{% if product.id in price_alert_product_ids %} notify-btn--active{% endif %}"
+  data-product-id="{{ product.id }}"
+  data-toggle-url="{% url 'products:toggle_price_alert' product_id=product.id %}"
+  data-login-url="{% url 'accounts:login' %}"
+  aria-label="{% if product.id in price_alert_product_ids %}Unsubscribe from price alerts{% else %}Notify me when price drops{% endif %}"
+  title="{% if product.id in price_alert_product_ids %}Unsubscribe from price alerts{% else %}Notify me when price drops{% endif %}"
+>
+  <svg class="notify-btn__icon notify-btn__icon--outline" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 1 0-14 0v5l-2 2v1h18v-1l-2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+  </svg>
+  <svg class="notify-btn__icon notify-btn__icon--filled" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 1 0-14 0v5l-2 2v1h18v-1l-2-2z" fill="currentColor"/>
+  </svg>
+  <span class="notify-btn__label">{% if product.id in price_alert_product_ids %}Subscribed{% else %}Notify Me{% endif %}</span>
+</button>

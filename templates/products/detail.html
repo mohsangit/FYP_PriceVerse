@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{{ product.title }} | PriceVerse{% endblock %}
+
+
+
+{% block content %}
+
+<section class="section product-detail">
+
+  <div class="container">
+
+    <a class="product-detail__back" href="{% url 'products:list' %}">← Back to products</a>
+
+
+
+    <div class="product-detail__hero">
+
+      <div class="product-detail__media">
+
+        {% include "partials/product_image.html" with product=product %}
+
+      </div>
+
+
+
+      <div class="product-detail__info">
+
+        <div class="product-detail__badges">
+          {% if best and best.listing.is_on_sale and best.listing.discount_pct %}
+            <span class="product__badge product__badge--sale">{{ best.listing.discount_pct }}% OFF</span>
+          {% else %}
+            <span class="product__badge">{{ product.insight_tag }}</span>
+          {% endif %}
+          <span class="product-detail__trend">{{ product.trend_text }} • {{ product.trend_days }}d</span>
+        </div>
+
+
+
+        {% if product.brand %}
+
+          <div class="product-detail__brand">{{ product.brand }}</div>
+
+        {% endif %}
+
+
+
+        <h1 class="product-detail__title">{{ product.title }}</h1>
+
+        {% if is_discontinued %}
+          <p class="product-detail__discontinued" role="status">{{ discontinued_message }}</p>
+        {% endif %}
+
+
+
+        {% if product.description %}
+
+          <p class="product-detail__desc">{{ product.description }}</p>
+
+        {% elif product.short_description %}
+
+          <p class="product-detail__desc">{{ product.short_description }}</p>
+
+        {% endif %}
+
+
+
+        {% if best %}
+          <div class="product-detail__best">
+            {% include "partials/sale_price.html" with listing=best.listing %}
+            {% if best.best_discount_pct %}
+              <div class="product-detail__discount">{{ best.best_discount_pct }}% off on {{ best.store_name }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+
+        <div class="product-detail__actions">
+
+          {% include "partials/favorite_button.html" with product=product %}
+
+          {% include "partials/notify_button.html" with product=product %}
+
+        </div>
+
+
+
+        <p class="product-detail__notify-note muted">
+
+          Tap <strong>Notify Me</strong> to get a confirmation email and alerts when the price drops or a better discount appears.
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    {% if display_specifications %}
+
+      <div class="product-detail__specs">
+
+        <h2 class="section__title">Specifications</h2>
+
+        {% if specs_source == 'whatmobile' %}
+          <p class="product-detail__specs-note muted">Detailed specifications provided from WhatMobile.</p>
+        {% endif %}
+
+        <div class="spec-table">
+
+          {% for key, value in display_specifications.items %}
+
+            <div class="spec-table__row">
+
+              <div class="spec-table__key">{{ key }}</div>
+
+              <div class="spec-table__value">{{ value|linebreaksbr }}</div>
+
+            </div>
+
+          {% endfor %}
+
+        </div>
+
+      </div>
+
+    {% endif %}
+
+
+
+    <div class="product-detail__stores">
+
+      <h2 class="section__title">Available on</h2>
+
+      <p class="section__sub">Compare prices across source platforms and visit the original listing.</p>
+
+
+
+      <div class="store-list">
+
+        {% for row in listing_rows %}
+
+          <div class="store-card">
+
+            <div class="store-card__header">
+              <span class="store-card__name">{{ row.listing.store.name }}</span>
+              <span class="store-card__source{% if is_discontinued %} store-card__source--discontinued{% endif %}">
+                {% if is_discontinued %}
+                  {{ discontinued_message }}
+                {% else %}
+                  {{ row.listing.get_availability_status_display }}
+                  {% if row.listing.is_on_sale %} • On Sale{% endif %}
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="store-card__prices">
+              {% include "partials/sale_price.html" with listing=row.listing %}
+            </div>
+
+            {% if row.listing.source_website %}
+              <div class="store-card__meta">Source: {{ row.listing.source_website }}</div>
+            {% endif %}
+
+            <div class="store-card__meta">
+              Last checked {{ row.listing.last_scraped_at|date:"M j, Y g:i A" }}
+
+            </div>
+
+
+
+            <a class="btn btn--primary store-card__link" href="{{ row.listing.product_url }}" target="_blank" rel="noopener noreferrer">
+
+              View on {{ row.listing.store.name }} →
+
+            </a>
+
+          </div>
+
+        {% empty %}
+
+          <p class="muted">No store listings available for this product yet.</p>
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Price drop alert</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #0b1324; line-height: 1.6; max-width: 560px; margin: 0 auto; padding: 24px;">
+  <p>Hi {{ user.username }},</p>
+
+  <p>Great news! <strong>{{ product.title }}</strong> is now available at a better price.</p>
+
+  <div style="background: #eef3ff; border: 1px solid #dbe6ff; border-radius: 12px; padding: 16px 18px; margin: 18px 0;">
+    {% if discount_pct %}
+      <p style="margin: 0 0 6px;"><strong>Updated deal:</strong> Rs {{ info.best_price }} ({{ discount_pct }}% off)</p>
+    {% else %}
+      <p style="margin: 0 0 6px;"><strong>Updated price:</strong> Rs {{ info.best_price }}</p>
+    {% endif %}
+    <p style="margin: 0;">The {{ product.title }} is now available at its best price. Check it out now!</p>
+  </div>
+
+  <p>
+    <a href="{{ product_url }}" style="display: inline-block; background: #3b5cff; color: #fff; text-decoration: none; padding: 12px 18px; border-radius: 10px; font-weight: bold;">
+      View on PriceVerse
+    </a>
+  </p>
+
+  <p style="color: #6a7a99; font-size: 13px;">You received this email because you subscribed to price alerts on PriceVerse.</p>
+</body>
+</html>

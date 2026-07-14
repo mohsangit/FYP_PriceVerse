@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About | PriceVerse{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="hero__bg"></div>
+  <div class="container hero__inner">
+    <div class="pill" data-reveal>
+      <span class="pill__dot"></span>
+      About PriceVerse
+    </div>
+    <h1 class="about-hero__title" data-reveal>
+      Smart Price Intelligence for <span class="grad">Samsung &amp; iPhone</span>
+    </h1>
+    <p class="about-hero__sub" data-reveal>
+      PriceVerse is an AI-powered price comparison platform that scrapes live phone prices,
+      tracks discounts, detects fake sales, and helps you never overpay again.
+    </p>
+    <div class="hero__buttons" data-reveal>
+      <a class="btn btn--primary" href="{% url 'products:list' %}">Browse Products</a>
+      {% if is_site_admin %}
+      <a class="btn btn--ghost" href="{% url 'products:scrape' %}">See the Scraper</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="about-overview">
+      <div class="about-overview__text" data-reveal>
+        <div class="section__pill" style="margin:0 0 14px;">Project Overview</div>
+        <h2 style="margin:0 0 16px; font-size:clamp(26px,3vw,36px);">A final-year project built to make shopping smarter</h2>
+        <p>
+          PriceVerse brings together real-time web scraping, a structured product database, and an
+          AI assistant into a single, modern web application. It continuously collects phone listings
+          from multiple Pakistani retailers, normalizes them, and presents the best available price
+          alongside discount insights and price trends.
+        </p>
+        <p>
+          The goal is simple: give shoppers a trustworthy, data-driven view of phone prices so they can
+          compare confidently, spot genuine deals, and get notified the moment a price drops.
+        </p>
+      </div>
+      <div class="about-overview__panel" data-reveal data-reveal-delay="2">
+        <div class="about-stat">
+          <span class="about-stat__label">Products Tracked</span>
+          <span class="about-stat__num">{{ site_stats.product_count }}</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat__label">Stores Connected</span>
+          <span class="about-stat__num">{{ site_stats.store_count }}</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat__label">Active Listings</span>
+          <span class="about-stat__num">{{ site_stats.listing_count }}</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat__label">Price Records</span>
+          <span class="about-stat__num">{{ site_stats.history_count }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__pill" data-reveal>Core Features</div>
+    <h2 class="section__title" data-reveal>Everything PriceVerse <span class="grad2">Can Do</span></h2>
+    <p class="section__sub" data-reveal>A complete toolkit for tracking, comparing and saving on Samsung &amp; Apple phones.</p>
+
+    <div class="feature-grid">
+      <article class="feature-card" data-reveal>
+        <span class="feature-card__badge">Live</span>
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="17" r="3" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h3>Product Scraper</h3>
+        <p>Batch scrapes phone data from MobileTrade and PriceOye — names, prices, discounts, specs, images and availability — directly into the database.</p>
+      </article>
+
+      <article class="feature-card" data-reveal data-reveal-delay="1">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M11 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Samsung &amp; iPhone Database</h3>
+        <p>A structured, growing catalog of Samsung and Apple iPhone models with full specifications, brand info and rich product details.</p>
+      </article>
+
+      <article class="feature-card" data-reveal data-reveal-delay="2">
+        <span class="feature-card__badge">AI</span>
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8A2.5 2.5 0 0 1 17.5 16H9l-4 3.5V5.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>AI Chatbot Assistant</h3>
+        <p>An AI-powered assistant that answers questions about phone prices, specs, discounts and recommendations in natural language.</p>
+      </article>
+
+      <article class="feature-card" data-reveal>
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 6H4v5M15 18h5v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 4 4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Price Comparison System</h3>
+        <p>Instantly compares the same phone across multiple stores and surfaces the best available price with per-store breakdowns.</p>
+      </article>
+
+      <article class="feature-card" data-reveal data-reveal-delay="1">
+        <span class="feature-card__badge">Smart</span>
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Discount &amp; Sale Tracking</h3>
+        <p>Highlights genuine sale items, shows old vs. current prices and discount percentages, and helps flag misleading "fake" discounts.</p>
+      </article>
+
+      <article class="feature-card" data-reveal data-reveal-delay="2">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" stroke-width="2"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h3>Dynamic Database Integration</h3>
+        <p>Every page is powered live from the database — products, listings, prices and reviews update dynamically as new data is scraped.</p>
+      </article>
+
+      <article class="feature-card" data-reveal>
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 4.5C19 16.5 12 21 12 21z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Favorites &amp; Wishlist</h3>
+        <p>Logged-in users can save phones to favorites and keep a personal watchlist of the products they care about most.</p>
+      </article>
+
+      <article class="feature-card" data-reveal data-reveal-delay="1">
+        <span class="feature-card__badge">Alerts</span>
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 1 0-14 0v5l-2 2v1h18v-1l-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Price Drop Email Alerts</h3>
+        <p>Subscribe to a product and get a confirmation email plus automatic notifications when the price drops or a better discount appears.</p>
+      </article>
+
+      <article class="feature-card" data-reveal data-reveal-delay="2">
+        <div class="feature-card__icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16M8 16l3-4 3 2 4-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Specs &amp; Trend Insights</h3>
+        <p>Each product shows a detailed specifications table along with insight tags and price trend indicators to guide buying decisions.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section__pill" data-reveal>How It Works</div>
+    <h2 class="section__title" data-reveal>From Scrape to <span class="grad2">Smart Decision</span></h2>
+    <p class="section__sub" data-reveal>Four simple stages power the entire PriceVerse experience.</p>
+
+    <div class="steps">
+      <div class="step" data-reveal>
+        <div class="step__num"></div>
+        <h3>Scrape</h3>
+        <p>Live phone listings are collected from multiple retailers in controlled batches.</p>
+      </div>
+      <div class="step" data-reveal data-reveal-delay="1">
+        <div class="step__num"></div>
+        <h3>Store</h3>
+        <p>Data is cleaned and saved into a structured database of products and listings.</p>
+      </div>
+      <div class="step" data-reveal data-reveal-delay="2">
+        <div class="step__num"></div>
+        <h3>Compare</h3>
+        <p>Prices across stores are analyzed to surface the best deal and real discounts.</p>
+      </div>
+      <div class="step" data-reveal data-reveal-delay="3">
+        <div class="step__num"></div>
+        <h3>Notify</h3>
+        <p>You favorite products, ask the AI assistant, and get alerts when prices drop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "partials/reviews_section.html" %}
+
+<section class="section">
+  <div class="container">
+    <div class="section__pill" data-reveal>FAQ</div>
+    <h2 class="section__title" data-reveal>Frequently Asked <span class="grad2">Questions</span></h2>
+    <p class="section__sub" data-reveal>Everything you need to know about how PriceVerse works.</p>
+
+    <div class="faq">
+      <details class="faq__item" data-reveal>
+        <summary class="faq__q">Which phones does PriceVerse track?</summary>
+        <div class="faq__a">PriceVerse focuses on Samsung and Apple iPhone devices, building a structured database of models, specifications and live prices from multiple stores.</div>
+      </details>
+      <details class="faq__item" data-reveal>
+        <summary class="faq__q">Where do the prices come from?</summary>
+        <div class="faq__a">Prices are scraped directly from real retailers such as MobileTrade and PriceOye, so the figures you see reflect actual store listings rather than estimates.</div>
+      </details>
+      <details class="faq__item" data-reveal>
+        <summary class="faq__q">How does the discount detection work?</summary>
+        <div class="faq__a">Each listing stores its original and current price. PriceVerse compares them to compute the real discount percentage and highlights genuine sales while making inflated "fake" discounts easy to spot.</div>
+      </details>
+      <details class="faq__item" data-reveal>
+        <summary class="faq__q">What can the AI chatbot do?</summary>
+        <div class="faq__a">The assistant answers questions about phone prices, specifications, comparisons, discounts and recommendations — all based on the products in the PriceVerse database.</div>
+      </details>
+      <details class="faq__item" data-reveal>
+        <summary class="faq__q">How do price drop alerts work?</summary>
+        <div class="faq__a">When you tap “Notify Me” on a product, PriceVerse records your subscription and emails you when the best price drops or a better discount becomes available.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta__box" data-reveal>
+    <h2>Start Shopping Smarter</h2>
+    <p>Compare Samsung &amp; iPhone prices, track discounts, and let PriceVerse help you find the best deal every time.</p>
+    <div class="cta__btns">
+      <a class="btn btn--white" href="{% url 'products:list' %}">Browse Products</a>
+      <a class="btn btn--ghost2" href="{% url 'accounts:signup' %}">Create Free Account</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

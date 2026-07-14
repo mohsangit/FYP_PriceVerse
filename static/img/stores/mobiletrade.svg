@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MobileTrade">
+  <defs>
+    <linearGradient id="mt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8a3d"/>
+      <stop offset="100%" stop-color="#ff5a2e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#mt)"/>
+  <rect x="20" y="14" width="24" height="36" rx="5" fill="#fff" opacity=".95"/>
+  <rect x="24" y="18" width="16" height="24" rx="2" fill="#ff6b35" opacity=".25"/>
+  <circle cx="32" cy="46" r="2.5" fill="#ff6b35"/>
+</svg>

@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load humanize %}
+
+
+
+{% block title %}Comparison Results | PriceVerse{% endblock %}
+
+
+
+{% block extra_head %}
+
+  <link rel="stylesheet" href="{% static 'css/compare.css' %}">
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<section class="cmp cmp--results">
+
+  <div class="container">
+
+
+
+    <div class="cmp__head cmp__head--results" data-reveal>
+
+      <a class="cmp__back" href="{% url 'products:compare' %}?a={{ selected_a }}&b={{ selected_b }}">← Change phones</a>
+
+      <span class="cmp__pill">Comparison Results</span>
+
+      <h1 class="cmp__title">Side-by-Side <span class="grad">Analysis</span></h1>
+
+    </div>
+
+
+
+    {% if build_error %}
+
+      <div class="cmp-empty cmp-empty--error" data-reveal>
+
+        <div class="cmp-empty__icon">⚠️</div>
+
+        <h3>Comparison unavailable</h3>
+
+        <p>{{ build_error }}</p>
+
+        <a class="btn btn--primary" href="{% url 'products:compare' %}">Back to phone selection</a>
+
+      </div>
+
+
+
+    {% elif comparison %}
+
+      <div class="cmp-loading" id="cmpResultsLoading" aria-live="polite">
+        <div class="cmp-loading__card">
+          <span class="cmp-spinner cmp-spinner--lg"></span>
+          <p>Loading specifications from WhatMobile…</p>
+        </div>
+      </div>
+
+      <div id="cmpResultsContent" class="cmp-results-content is-pending">
+
+      {% with a=comparison.a b=comparison.b %}
+
+      <div class="cmp-heroes">
+
+        <article class="cmp-hero cmp-hero--a">
+
+          {% if comparison.overall == 'a' %}<span class="cmp-hero__winner">🏆 Winner</span>{% endif %}
+
+          <div class="cmp-hero__media">
+
+            {% if a.image %}
+
+              <img class="cmp-hero__img" src="{{ a.image }}" alt="{{ a.name }}" loading="lazy" onerror="this.onerror=null;this.style.display='none';this.insertAdjacentHTML('afterend','<div class=&quot;product__img-placeholder&quot;>No image</div>');">
+
+            {% else %}
+
+              <div class="product__img-placeholder" aria-label="{{ a.name }}">No image</div>
+
+            {% endif %}
+
+          </div>
+
+          {% if a.brand %}<div class="cmp-hero__brand">{{ a.brand }}</div>{% endif %}
+
+          <h3 class="cmp-hero__name">{{ a.name }}</h3>
+
+          <div class="cmp-hero__price">
+
+            {% if a.price_display and a.price_display != '—' %}
+
+              <span class="cmp-hero__price-now">{{ a.price_display }}</span>
+
+              {% if a.is_on_sale and a.old_price %}<span class="cmp-hero__price-old">Rs. {{ a.old_price|intcomma }}</span>{% endif %}
+
+            {% else %}
+
+              <span class="cmp-hero__price-now">Price N/A</span>
+
+            {% endif %}
+
+          </div>
+
+          <div class="cmp-hero__badges">
+
+            {% if a.is_discontinued %}
+              <span class="cmp-tag cmp-tag--discontinued">{{ a.discontinued_message }}</span>
+            {% endif %}
+            {% if a.discount_pct %}<span class="cmp-tag cmp-tag--sale">{{ a.discount_pct }}% OFF</span>{% endif %}
+            {% if a.price_source == 'retailer' and a.store %}<span class="cmp-tag cmp-tag--price">Discounted price</span>{% endif %}
+            {% if a.price_source == 'whatmobile' and not a.is_discontinued %}<span class="cmp-tag">WhatMobile price</span>{% endif %}
+            {% if a.release_status and not a.is_discontinued %}<span class="cmp-tag cmp-tag--stock">{{ a.release_status }}</span>{% endif %}
+            {% if a.store and a.price_source == 'retailer' %}<span class="cmp-tag">{{ a.store }}</span>{% endif %}
+
+          </div>
+
+        </article>
+
+
+
+        <article class="cmp-hero cmp-hero--b">
+
+          {% if comparison.overall == 'b' %}<span class="cmp-hero__winner">🏆 Winner</span>{% endif %}
+
+          <div class="cmp-hero__media">
+
+            {% if b.image %}
+
+              <img class="cmp-hero__img" src="{{ b.image }}" alt="{{ b.name }}" loading="lazy" onerror="this.onerror=null;this.style.display='none';this.insertAdjacentHTML('afterend','<div class=&quot;product__img-placeholder&quot;>No image</div>');">
+
+            {% else %}
+
+              <div class="product__img-placeholder" aria-label="{{ b.name }}">No image</div>
+
+            {% endif %}
+
+          </div>
+
+          {% if b.brand %}<div class="cmp-hero__brand">{{ b.brand }}</div>{% endif %}
+
+          <h3 class="cmp-hero__name">{{ b.name }}</h3>
+
+          <div class="cmp-hero__price">
+
+            {% if b.price_display and b.price_display != '—' %}
+
+              <span class="cmp-hero__price-now">{{ b.price_display }}</span>
+
+              {% if b.is_on_sale and b.old_price %}<span class="cmp-hero__price-old">Rs. {{ b.old_price|intcomma }}</span>{% endif %}
+
+            {% else %}
+
+              <span class="cmp-hero__price-now">Price N/A</span>
+
+            {% endif %}
+
+          </div>
+
+          <div class="cmp-hero__badges">
+
+            {% if b.is_discontinued %}
+              <span class="cmp-tag cmp-tag--discontinued">{{ b.discontinued_message }}</span>
+            {% endif %}
+            {% if b.discount_pct %}<span class="cmp-tag cmp-tag--sale">{{ b.discount_pct }}% OFF</span>{% endif %}
+            {% if b.price_source == 'retailer' and b.store %}<span class="cmp-tag cmp-tag--price">Discounted price</span>{% endif %}
+            {% if b.price_source == 'whatmobile' and not b.is_discontinued %}<span class="cmp-tag">WhatMobile price</span>{% endif %}
+            {% if b.release_status and not b.is_discontinued %}<span class="cmp-tag cmp-tag--stock">{{ b.release_status }}</span>{% endif %}
+            {% if b.store and b.price_source == 'retailer' %}<span class="cmp-tag">{{ b.store }}</span>{% endif %}
+
+          </div>
+
+        </article>
+
+      </div>
+
+
+
+      <div class="cmp-specs" id="cmpSpecs">
+
+        <div class="cmp-specs__head">
+
+          <div class="c-start">Specification</div>
+
+          <div class="c-mid">{{ a.name }}</div>
+
+          <div class="c-end">{{ b.name }}</div>
+
+        </div>
+
+
+
+        {% with price_row=comparison.price_row %}
+        {% if price_row %}
+        <div class="cmp-row cmp-row--price">
+
+          <div class="cmp-row__label">{{ price_row.label }}</div>
+
+          <div class="cmp-cell {% if price_row.winner == 'a' %}cmp-cell--win{% endif %}" data-phone="{{ a.name }}">
+
+            {% if price_row.winner == 'a' %}<span class="cmp-cell__win-label">Better</span>{% endif %}
+
+            <span>{{ price_row.a }}</span>
+
+          </div>
+
+          <div class="cmp-cell {% if price_row.winner == 'b' %}cmp-cell--win{% endif %}" data-phone="{{ b.name }}">
+
+            {% if price_row.winner == 'b' %}<span class="cmp-cell__win-label">Better</span>{% endif %}
+
+            <span>{{ price_row.b }}</span>
+
+          </div>
+
+        </div>
+        {% endif %}
+        {% endwith %}
+
+
+
+        {% for section in comparison.sections %}
+
+          <div class="cmp-specs__category">{{ section.category }}</div>
+
+          {% for row in section.rows %}
+
+            <div class="cmp-row">
+
+              <div class="cmp-row__label">{{ row.label }}</div>
+
+              <div class="cmp-cell {% if row.winner == 'a' %}cmp-cell--win{% endif %}" data-phone="{{ a.name }}">
+
+                {% if row.winner == 'a' %}<span class="cmp-cell__win-label">Better</span>{% endif %}
+
+                <span>{{ row.a|linebreaksbr }}</span>
+
+              </div>
+
+              <div class="cmp-cell {% if row.winner == 'b' %}cmp-cell--win{% endif %}" data-phone="{{ b.name }}">
+
+                {% if row.winner == 'b' %}<span class="cmp-cell__win-label">Better</span>{% endif %}
+
+                <span>{{ row.b|linebreaksbr }}</span>
+
+              </div>
+
+            </div>
+
+          {% endfor %}
+
+        {% endfor %}
+
+        {% if not comparison.has_specs %}
+          <div class="cmp-empty cmp-empty--inline">
+            <p>No specification data is available for these phones yet. Run the WhatMobile scraper to refresh phone data.</p>
+          </div>
+        {% endif %}
+
+      </div>
+
+      {% endwith %}
+
+      </div>
+
+    {% endif %}
+
+
+
+  </div>
+
+</section>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+  <script src="{% static 'js/compare.js' %}"></script>
+
+{% endblock %}
+

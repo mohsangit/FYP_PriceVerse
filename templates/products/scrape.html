@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+
+
+{% load static %}
+
+
+
+{% block title %}Scrape | PriceVerse{% endblock %}
+
+
+
+
+
+
+
+{% block content %}
+
+
+
+<section class="section section--alt">
+
+
+
+  <div class="container">
+
+
+
+    <div class="section__pill">Scrape Center</div>
+
+
+
+    <h2 class="section__title">Phone Data Scrapers</h2>
+
+
+
+    <p class="section__sub">
+
+
+
+      Two independent scrapers: retailer prices from <strong>MobileTrade</strong>,
+
+
+
+      <strong>PriceOye</strong>, and <strong>Techroid</strong>,
+
+
+
+      and full specifications from <strong>WhatMobile</strong> for the comparison feature.
+
+
+
+    </p>
+
+
+
+
+
+
+
+    <div class="scrape-grid">
+
+
+
+      <div class="card scrape-panel">
+
+
+
+        <h3 class="scrape-panel__title">Retailer Scraper</h3>
+
+
+
+        <p class="scrape-panel__desc muted">
+
+
+
+          Batch scraping from MobileTrade, PriceOye, and Techroid. Checks for duplicate records before scraping.
+
+
+
+          Saves prices, discounts, images, and retailer specifications to the main product database.
+
+
+
+        </p>
+
+
+
+
+
+
+
+        <ul class="scrape-panel__stores">
+
+
+
+          <li>MobileTrade — 25 records → 5-second wait → next 25 records</li>
+
+
+
+          <li>PriceOye — 25 records → 5-second wait → next 25 records</li>
+
+
+
+          <li>Techroid — 25 records → 5-second wait → next 25 records</li>
+
+
+
+        </ul>
+
+
+
+
+
+
+
+        <div id="scrapeStatus" class="scrape-status scrape-status--idle" aria-live="polite">
+
+
+
+          Ready to scrape retailers. Click the button below to begin.
+
+
+
+        </div>
+
+
+
+        <div id="scrapeProgress" class="scrape-progress scrape-progress--hidden" aria-live="polite"></div>
+
+
+
+
+
+
+
+        <div class="scrape-panel__actions">
+
+
+
+          <button type="button" class="btn btn--primary" id="startScrapeBtn">Start Retailer Scraping</button>
+
+
+
+          <a class="btn btn--soft" href="{% url 'products:list' %}">View Products</a>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+
+
+      <div class="card scrape-panel scrape-panel--whatmobile">
+
+
+
+        <h3 class="scrape-panel__title">WhatMobile Scraper</h3>
+
+
+
+        <p class="scrape-panel__desc muted">
+
+
+
+          Scrapes all Apple (iPhone) and Samsung phone models from WhatMobile. Saves complete specifications,
+
+
+
+          images, and official prices to the comparison database.
+
+
+
+        </p>
+
+
+
+
+
+
+
+        <ul class="scrape-panel__stores">
+
+
+
+          <li>Apple (iPhone) — all phone models scraped first</li>
+
+
+
+          <li>Samsung — scraped after Apple is fully complete</li>
+
+
+
+          <li>Updates existing records instead of creating duplicates</li>
+
+
+
+          <li>Saves each phone immediately — click again to resume if interrupted</li>
+
+
+
+        </ul>
+
+
+
+
+
+
+
+        <div id="wmScrapeStatus" class="scrape-status scrape-status--idle" aria-live="polite">
+
+
+
+          Ready to scrape WhatMobile. Click the button below to begin.
+
+
+
+        </div>
+
+
+
+        <div id="wmScrapeProgress" class="scrape-progress scrape-progress--hidden" aria-live="polite"></div>
+
+
+
+
+
+
+
+        <div class="scrape-panel__actions">
+
+
+
+          <button type="button" class="btn btn--primary" id="startWmScrapeBtn">Start WhatMobile Scraping</button>
+
+
+
+          <a class="btn btn--soft" href="{% url 'products:compare' %}">Open Comparison</a>
+
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <p class="tiny muted scrape-panel__note">
+
+
+
+      * Scraping is restricted to site admins. Progress updates appear live while batches run.
+
+
+
+    </p>
+
+
+
+  </div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<script>
+
+
+
+  window.PV_SCRAPE_START_URL = "{% url 'products:scrape_start' %}";
+
+
+
+  window.PV_SCRAPE_PROGRESS_URL = "{% url 'products:scrape_progress' %}";
+
+
+
+  window.PV_WM_SCRAPE_START_URL = "{% url 'products:whatmobile_scrape_start' %}";
+
+
+
+  window.PV_WM_SCRAPE_PROGRESS_URL = "{% url 'products:whatmobile_scrape_progress' %}";
+
+
+
+</script>
+
+
+
+<script src="{% static 'js/scrape.js' %}"></script>
+
+
+
+{% endblock %}
+
+

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}PriceVerse{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="container hero__inner">
+
+    <div class="pill">
+      <span class="pill__dot"></span>
+      AI-Powered Price Intelligence
+    </div>
+
+    <h1 class="hero__title">
+      Find the Best Prices.<br>
+      <span class="grad">Predict the Future.</span> Shop<br>
+      Smart with AI.
+    </h1>
+
+    <p class="hero__sub">
+      Compare prices across stores, predict price drops, detect fake discounts,
+      and get intelligent alerts — all powered by AI.
+    </p>
+
+    <div class="search">
+      <div class="search__icon">🔎</div>
+      <input id="searchInput" class="search__input" placeholder="Search here" />
+      <button id="searchBtn" class="btn btn--primary search__btn">Search →</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__num">{{ site_stats.product_count }}</div>
+        <div class="stat__label">Products Tracked</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">{{ site_stats.store_count }}</div>
+        <div class="stat__label">Stores Connected</div>
+      </div>
+      <div class="stat">
+        <div class="stat__num">{{ site_stats.listing_count }}</div>
+        <div class="stat__label">Active Listings</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="compare">
+  <div class="container">
+    <div class="section__pill" data-reveal>Trending Now</div>
+    <h2 class="section__title" data-reveal>Popular Products with <span class="grad2">AI Insights</span></h2>
+
+    <div class="grid grid--3" style="margin-top:34px;">
+      {% for card in popular_cards %}
+        {% with p=card.product %}
+        <div class="product{% if card.best_listing and card.best_listing.is_on_sale and card.best_listing.old_price %} product--sale{% endif %}" data-reveal data-reveal-delay="{% widthratio forloop.counter0 1 1 %}">
+          {% include "partials/favorite_button.html" with product=p %}
+          {% include "partials/product_card_badge.html" with product=p listing=card.best_listing %}
+
+          <a class="product__img" href="{% url 'products:detail' slug=p.slug %}">
+            {% include "partials/product_image.html" with product=p %}
+          </a>
+
+          <div class="product__meta">
+            <a class="product__name" href="{% url 'products:detail' slug=p.slug %}">{{ p.title }}</a>
+            {% if p.brand %}<div class="product__brand">{{ p.brand }}</div>{% endif %}
+
+            {% include "partials/sale_price.html" with listing=card.best_listing %}
+
+            <div class="product__small">{{ p.trend_text }} • {{ p.trend_days }}d</div>
+            <div class="product__actions">
+              {% include "partials/notify_button.html" with product=p %}
+            </div>
+          </div>
+        </div>
+        {% endwith %}
+      {% empty %}
+        <p class="muted center">No products in the database yet. Use the scrape page to add products.</p>
+      {% endfor %}
+    </div>
+
+    <div style="text-align:center; margin-top:26px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;" data-reveal>
+      <a class="btn btn--primary" href="{% url 'products:compare' %}">Compare Phones</a>
+      <a class="btn btn--soft" href="{% url 'products:list' %}">View All Products</a>
+    </div>
+  </div>
+</section>
+
+{% include "partials/reviews_section.html" %}
+
+<section class="cta">
+  <div class="container cta__box" data-reveal>
+    <h2>Never Overpay Again</h2>
+    <p>Join thousands of smart shoppers who save money with AI-powered price tracking and predictions.</p>
+    <div class="cta__btns">
+      <a class="btn btn--white" href="{% url 'accounts:signup' %}">Start Comparing Prices</a>
+      <a class="btn btn--ghost2" href="{% url 'core:about' %}">Learn More</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

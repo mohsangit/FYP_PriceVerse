@@ -1,0 +1,50 @@
+{% load static product_extras %}
+
+<div class="source-filters" role="group" aria-label="Filter products by website source">
+  {% for store in source_filters %}
+    {% if source == store.slug %}
+      <div class="source-filter source-filter--{{ store.slug }} is-active" data-source-filter>
+        <a
+          class="source-filter__body"
+          href="{% url 'products:list' %}?{% product_list_query q=q source=store.slug %}"
+          aria-current="true"
+        >
+          <span class="source-filter__label">{{ store.name }}</span>
+          <img
+            class="source-filter__logo"
+            src="{% static store.logo %}"
+            alt=""
+            width="28"
+            height="28"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <a
+          class="source-filter__clear"
+          href="{% url 'products:list' %}{% if q %}?{% product_list_query q=q %}{% endif %}"
+          aria-label="Clear {{ store.name }} filter"
+          title="Clear filter"
+          data-source-clear
+        >&times;</a>
+      </div>
+    {% else %}
+      <a
+        class="source-filter source-filter--{{ store.slug }}"
+        href="{% url 'products:list' %}?{% product_list_query q=q source=store.slug %}"
+        data-source-filter
+      >
+        <span class="source-filter__label">{{ store.name }}</span>
+        <img
+          class="source-filter__logo"
+          src="{% static store.logo %}"
+          alt=""
+          width="28"
+          height="28"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    {% endif %}
+  {% endfor %}
+</div>
